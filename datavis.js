@@ -23,6 +23,8 @@ d3.json('all-ages.json', function(error, data) {
 
   data = nonZeroUnemployment(data);
 
+  var sortType = 'descending';
+
   var original_data = data;
 
   var allMajors = getAllMajors(data);
@@ -59,7 +61,11 @@ d3.json('all-ages.json', function(error, data) {
     var selectedView = this.value;
 
     if (selectedView == 'Unemployment Rate') {
-      data = sortByUnemployment(original_data);
+      if (sortType == 'descending') {
+        data = sortByUnemployment(original_data);
+      } else {
+        data = sortByUnemployment(original_data).reverse();
+      }
     } else if (selectedView == 'Major') {
       data = sortByMajor(original_data); 
     } else if (selectedView == 'Major Category') {
@@ -124,6 +130,40 @@ d3.json('all-ages.json', function(error, data) {
       .attr('y', barHeight / 2)
       .attr('dy', '.35em')
       .text(function(d) { return d.Major; })
+      .on('mouseover', function() {
+
+        d3.select(this)
+          .style('fill', '#2ecc71');
+        d3.select(this.parentNode)
+          .append('text')
+            .attr('id', 'tooltip')
+            .attr('text-anchor', 'end')
+            .attr('x', function(d) {
+              return x(d.Unemployment_rate) - 5;
+            })
+            .attr('y', 12.5)
+            .style('fill', 'white')
+            .text(function(d) {
+              return prec(d.Unemployment_rate);
+            });
+        d3.select(this.parentNode).select('rect')
+          .style('fill', '#2ecc71');
+      
+      })
+      .on('mouseout', function() {
+
+        d3.select(this)
+          .transition().duration(10)
+            .style('fill', '#34495e');
+        d3.selectAll("#tooltip")
+          .transition().duration(10)
+            .style('opacity', 0)
+            .remove()
+        d3.select(this.parentNode).select('rect')
+          .transition().duration(10)
+            .style('fill', '#3498db');
+
+      })
       .style('opacity', 0)
       .transition().duration(500)
         .style('opacity', 1);
@@ -142,6 +182,123 @@ d3.json('all-ages.json', function(error, data) {
         .attr('width', 0)
       .transition().delay(200).duration(500)
         .attr('width', function(d) { return x(d.Unemployment_rate); });
+
+    // reverse sort type
+
+    if (selectedView == 'Unemployment Rate') {
+      document.getElementsByClassName('chart')[0].onclick = function() {
+        if (sortType == 'descending') {
+          sortType = 'ascending';
+        } else {
+          sortType = 'descending';
+        }
+        document.getElementById("viewSelect").onchange();
+      };
+    } else {
+      document.getElementsByClassName('chart')[0].onclick = null;
+    }
+
+    // alphabetical indication
+
+    if (selectedView == 'Major') {
+      var majorAlphabeticals = getMajorAlphabeticals(data);
+    } else {
+      var majorAlphabeticals = [];
+    }
+
+    var letterCount = {};
+    for (var i = 0; i < data.length; i++) {
+      var letter = data[i].Major[0];
+      if (letter in letterCount) {
+        letterCount[letter]++;
+      } else {
+        letterCount[letter] = 1;
+      }
+    }
+
+    var letterY = {};
+    var yThusFar = 0;
+
+    for (var i = 0; i < Object.keys(letterCount).length; i++) {
+      var letter = Object.keys(letterCount)[i];
+      letterY[letter] = yThusFar;
+      yThusFar += letterCount[letter] * 20; 
+    }
+
+    var alph = chart.selectAll('g.alphg')
+      .data(majorAlphabeticals); // update selection
+
+    var alphEnter = alph.enter(); // enter selection
+    var alphExit = alph.exit(); // exit selection
+
+    var alphEnterG = alphEnter.append('g')
+      .attr('class', 'alphg')
+      .attr('transform', function(d) {
+        return 'translate(0,' + letterY[d] + ')';
+      });
+
+    alphEnterG.append('text')
+      .attr('x', width - 5)
+      .attr('y', 13)
+      .attr('text-anchor', 'end')
+      .text( function(d) { return d; })
+      .attr('pointer-events', 'none');
+
+    alphEnterG.append('rect')
+      .attr('x', width - 16)
+      .attr('y', 2)
+      .attr('width', 15)
+      .attr('height', 15)
+      .style('fill-opacity', 0)
+      .on('mouseover', function(d) {
+
+        d3.select(this.parentNode).append('rect')
+          .attr('class', 'highlighter')
+          .attr('height', function(d) {
+            return letterCount[d] * 20 - 1;
+          })
+          .attr('width', width)
+          .attr('fill', '#34495e')
+          .style('opacity', 0)
+          .transition().duration(300)
+            .style('opacity', 0.2);
+
+        d3.select(this).moveToFront();
+        bar.moveToFront();
+
+        var letter = d3.select(this.parentNode).select('text').text();
+
+        bar.selectAll('text')
+          .transition().duration(300)
+            .style('opacity', function(d) {
+              if (d.Major[0] != letter) {
+                return 0.2;
+              }
+            });
+
+      })
+      .on('mouseout', function(d) {
+
+        d3.select(this.parentNode).selectAll('.highlighter')
+          .transition().duration(300)
+            .style('opacity', 0)
+            .remove();
+
+        bar.selectAll('text')
+          .transition().duration(300)
+            .style('opacity', 1);
+
+      });
+
+    alph
+      .style('opacity', 0)
+      .transition().delay(200).duration(500)
+        .style('opacity', 1);
+
+    alphExit
+      .transition().duration(50)
+          .style('opacity', 0)
+      .remove();
 
     // category indication
 
@@ -180,7 +337,7 @@ d3.json('all-ages.json', function(error, data) {
 
     var catEnterG = catEnter.append('g')
       .attr('class', 'catg')
-      .attr('transform', function(d, i) { 
+      .attr('transform', function(d) { 
         return 'translate(0,' + categoryY[d] + ')'; 
       });
 
@@ -217,6 +374,15 @@ d3.json('all-ages.json', function(error, data) {
               }
             });
 
+        bar.selectAll('text')
+          .transition().duration(300)
+            .style('fill', function(d) {
+              if (d.Major_category == category) {
+                return '#f1c40f'
+              }
+            });
+
+
       })
       .on('mouseout', function() {
 
@@ -227,6 +393,11 @@ d3.json('all-ages.json', function(error, data) {
         bar.selectAll('rect')
           .transition().duration(300)
             .style('fill', '#3498db');
+
+        bar.selectAll('text')
+          .transition().duration(300)
+            .style('fill', '#34495e');
+
       });
      
     bar.moveToFront();
@@ -261,6 +432,15 @@ function getAllMajors(data) {
   var result = _.map(data, function(d) {
     return d.Major;
   });
+  return result;
+}
+
+function getMajorAlphabeticals(data) {
+  var result = _.map(data, function(d) {
+    return d.Major[0]
+  });
+  result = _.uniq(result);
+  result = _.sortBy(result);
   return result;
 }
 

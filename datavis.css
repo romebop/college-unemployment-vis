@@ -40,14 +40,17 @@ a {
 }
 
 #sort-label {
-  float: left;
   margin-top: 10px;
+  display: inline-block;
 }
 
 #viewSelect {
-  float: left;
-  margin-top: 12px;
   margin-left: 5px;
+  display: inline-block;
+}
+
+#chart {
+  display: block;
 }
 
 #tooltip {

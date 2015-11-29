@@ -413,7 +413,7 @@ d3.json('all-ages.json', function(error, data) {
       .remove();
 
     // fixes graphical premature trigger bugs?
-    d3.select('.chart')
+    d3.select('#chart')
       .attr('pointer-events', 'none')
       .transition().delay(1000)
         .attr('pointer-events', 'all');

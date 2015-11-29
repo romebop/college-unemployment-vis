@@ -45,7 +45,7 @@ d3.json('all-ages.json', function(error, data) {
   x.domain( [ 0, d3.max(data, function(d) { return d.Unemployment_rate; }) ] );
   y.domain( data.map(function(d) { return d.Major; }) );
 
-  var chart = d3.select('.chart')
+  var chart = d3.select('#chart')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
     .append('g')
@@ -186,7 +186,7 @@ d3.json('all-ages.json', function(error, data) {
     // reverse sort type
 
     if (selectedView == 'Unemployment Rate') {
-      document.getElementsByClassName('chart')[0].onclick = function() {
+      document.getElementById('chart').onclick = function() {
         if (sortType == 'descending') {
           sortType = 'ascending';
         } else {
@@ -195,7 +195,7 @@ d3.json('all-ages.json', function(error, data) {
         document.getElementById("viewSelect").onchange();
       };
     } else {
-      document.getElementsByClassName('chart')[0].onclick = null;
+      document.getElementById('chart').onclick = null;
     }
 
     // alphabetical indication

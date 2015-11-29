@@ -2,11 +2,11 @@ body {
   z-index: 1;
 }
 
-.chart rect {
+#chart rect {
   fill: #3498db;
 }
 
-.chart text {
+#chart text {
   fill: #34495e;
   font: 10px sans-serif;
   text-anchor: end;
@@ -29,23 +29,25 @@ a {
 }
 
 #title {
-  float: left;
   font-weight: bold;
   font-size: large;
-  margin-left: 400px;
   font-family: sans-serif;
+  margin-left: 400px;
+}
+
+#sort-container {
+  margin-left: 400px;
 }
 
 #sort-label {
-  float: left;  
-  margin-left: 50px;
-  margin-top: 2px;
+  float: left;
+  margin-top: 10px;
 }
 
 #viewSelect {
-  float: left;    
+  float: left;
+  margin-top: 12px;
   margin-left: 5px;
-  margin-top: 2px;
 }
 
 #tooltip {

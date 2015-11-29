@@ -270,9 +270,9 @@ d3.json('all-ages.json', function(error, data) {
 
         bar.selectAll('text')
           .transition().duration(300)
-            .style('opacity', function(d) {
-              if (d.Major[0] != letter) {
-                return 0.2;
+            .style('fill', function(d) {
+              if (d.Major[0] == letter) {
+                return '#3498db';
               }
             });
 
@@ -286,7 +286,7 @@ d3.json('all-ages.json', function(error, data) {
 
         bar.selectAll('text')
           .transition().duration(300)
-            .style('opacity', 1);
+            .style('fill', '#34495e');
 
       });
 

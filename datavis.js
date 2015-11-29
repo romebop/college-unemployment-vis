@@ -412,6 +412,13 @@ d3.json('all-ages.json', function(error, data) {
           .style('opacity', 0)
       .remove();
 
+    // fixes graphical premature trigger bugs?
+    d3.select('.chart')
+      .attr('pointer-events', 'none')
+      .transition().delay(1000)
+        .attr('pointer-events', 'all');
+
+
   };
 
   document.getElementById("viewSelect").onchange(); // call this at start

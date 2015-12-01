@@ -4,6 +4,7 @@ d3.selection.prototype.moveToFront = function() {
   });
 };
 
+
 var margin = {top: 50, right: 30, bottom: 30, left: 400},
   width = 1250 - margin.left - margin.right,
   barHeight = 20;
@@ -56,10 +57,8 @@ d3.json('all-ages.json', function(error, data) {
     .attr('transform', 'translate(0, -10)')
     .call(xAxis);
 
-  document.getElementById("viewSelect").onchange = function () {
-
-    var selectedView = this.value;
-
+  var determineData = function(view, callback) {
+    var selectedView = view;
     if (selectedView == 'Unemployment Rate') {
       if (sortType == 'descending') {
         data = sortByUnemployment(original_data);
@@ -73,6 +72,10 @@ d3.json('all-ages.json', function(error, data) {
     } else { // 'Default'
       data = original_data;
     }
+    callback(selectedView);
+  }
+
+  var populateChart = function(selectedView) {
 
     var bar = chart.selectAll('g.barg')
       .data(data, key); // update selection
@@ -276,6 +279,10 @@ d3.json('all-ages.json', function(error, data) {
               }
             });
 
+        d3.select(this.parentNode).select('text')
+          .transition().duration(300)
+            .attr('fill', '#3498db');
+
       })
       .on('mouseout', function(d) {
 
@@ -287,6 +294,10 @@ d3.json('all-ages.json', function(error, data) {
         bar.selectAll('text')
           .transition().duration(300)
             .style('fill', '#34495e');
+
+        d3.select(this.parentNode).select('text')
+          .transition().duration(300)
+            .attr('fill', '#34495e');
 
       });
 
@@ -417,13 +428,17 @@ d3.json('all-ages.json', function(error, data) {
       .attr('pointer-events', 'none')
       .transition().delay(1000)
         .attr('pointer-events', 'all');
-
-
   };
+
+  document.getElementById("viewSelect").onchange = function () {
+
+    determineData(this.value, populateChart);
+
+  }; // end onchange
 
   document.getElementById("viewSelect").onchange(); // call this at start
 
-});
+}); // end d3 json read call
 
 function key(d) {
   return d.Major;

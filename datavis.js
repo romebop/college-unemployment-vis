@@ -26,7 +26,11 @@ d3.json('all-ages.json', function(error, data) {
 
   var sortType = 'descending';
 
-  var original_data = data;
+  var originalData = data;
+  var descendingData = sortByUnemployment(originalData);
+  var ascendingData = sortByUnemployment(originalData).reverse();
+  var alphabeticalData = sortByMajor(originalData);
+  var categoricalData = sortByMajorCategory(originalData);
 
   var allMajors = getAllMajors(data);
   var allMajorCategories = getAllMajorCategories(data);
@@ -61,16 +65,16 @@ d3.json('all-ages.json', function(error, data) {
     var selectedView = view;
     if (selectedView == 'Unemployment Rate') {
       if (sortType == 'descending') {
-        data = sortByUnemployment(original_data);
+        data = descendingData;
       } else {
-        data = sortByUnemployment(original_data).reverse();
+        data = ascendingData;
       }
     } else if (selectedView == 'Major') {
-      data = sortByMajor(original_data); 
+      data = alphabeticalData;
     } else if (selectedView == 'Major Category') {
-      data = sortByMajorCategory(original_data);
+      data = categoricalData;
     } else { // 'Default'
-      data = original_data;
+      data = originalData;
     }
     callback(selectedView);
   }

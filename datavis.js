@@ -317,7 +317,7 @@ d3.json('all-ages.json', function(error, data) {
 
     // category indication
 
-    var categoryColors = ['#f1c40f', '#e67e22', '#d35400']
+    var categoryColors = ['#f1c40f', '#e67e22', '#c0392b']
 
     if (selectedView == 'Major Category') {
       var majorCategories = getAllMajorCategories(data);

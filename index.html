@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <link rel='stylesheet' type='text/css' href='datavis.css'>
-</head>
-<body>
-
-  <div id='title'>
-    College Major vs. Unemployment Rate
-    <a href='https://github.com/fivethirtyeight/data/tree/master/college-majors'>(fivethirtyeight dataset)</a>
-  </div>
-
-  <div id='sort-container'>
-    <div id='sort-label'>sort by:</div>
-    <select id='viewSelect'></select>
-  </div>
-
-  <svg id='chart'></svg>
-
-  <script type='text/javascript' src='d3.min.js'></script>
-  <script type='text/javascript' src='underscore.js'></script>    
-  <script type='text/javascript' src='datavis.js'></script>
-
-  <div id='bottom_fade'></div>
-
-</body>
+  <head>
+    <link rel='stylesheet' type='text/css' href='style.css'>
+    <script type='text/javascript' src='js/d3.min.js' defer></script>
+    <script type='text/javascript' src='js/underscore.js' defer></script>
+    <script type='text/javascript' src='js/index.js' defer></script>
+  </head>
+  <body>
+    <div id='title'>
+      College Major vs. Unemployment Rate
+      <a href='https://github.com/fivethirtyeight/data/tree/master/college-majors'>(fivethirtyeight dataset)</a>
+    </div>
+    <div id='sort-container'>
+      <div id='sort-label'>sort by:</div>
+      <select id='viewSelect'></select>
+    </div>
+    <svg id='chart'></svg>
+    <div id='bottom_fade'></div>
+  </body>
 </html>

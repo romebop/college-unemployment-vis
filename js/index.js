@@ -4,7 +4,6 @@ d3.selection.prototype.moveToFront = function() {
   });
 };
 
-
 var margin = {top: 50, right: 30, bottom: 30, left: 400},
   width = 1250 - margin.left - margin.right,
   barHeight = 20;

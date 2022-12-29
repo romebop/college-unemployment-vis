@@ -1,5 +1,6 @@
 body {
   z-index: 1;
+  font-family: Helvetica Neue;
 }
 
 #chart rect {
@@ -8,7 +9,7 @@ body {
 
 #chart text {
   fill: #34495e;
-  font: 10px sans-serif;
+  font-size: 10px;
   text-anchor: end;
 }
 
@@ -29,9 +30,8 @@ a {
 }
 
 #title {
-  font-weight: bold;
+  font-weight: 500;
   font-size: large;
-  font-family: sans-serif;
   margin-left: 400px;
 }
 
@@ -47,6 +47,7 @@ a {
 #viewSelect {
   margin-left: 5px;
   display: inline-block;
+  font-family: Helvetica Neue;
 }
 
 #chart {
